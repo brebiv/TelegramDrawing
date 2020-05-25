@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="img-src *">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for ('static', filename='style.css') }}">
+    <title>Drawing Bot</title>
+    <script src="{{ url_for ('static', filename='bower_components/sketchpad/scripts/sketchpad.js') }}"></script>
+    <script src="{{ url_for ('static', filename='lib/jquery-3.5.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='drawing.js') }}?v=1"></script>
+</head>
+<body onload="init();">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-center">Draw here</h1>
+            </div>
+            <button onclick="toJPEG()">Save</button>
+        </div>
+    </div>
+    <canvas id="panel"></canvas>
+</body>
+</html>

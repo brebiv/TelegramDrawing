@@ -1,0 +1,20 @@
+{
+  "name": "Drawing Bot",
+  "main": "index.js",
+  "description": "Drawing bot for Telegram",
+  "keywords": [
+    "telegram"
+  ],
+  "authors": [
+    "brebiv"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
