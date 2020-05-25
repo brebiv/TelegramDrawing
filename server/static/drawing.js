@@ -6,7 +6,7 @@ function init() {
     });
 }
 
-function toJPEG() {
+function toPNG() {
     var hash = window.location.pathname.substr(1)   // path is /{hash}, so I'm removing first chat which is /
     console.log(hash)
     var canvas = document.getElementById("panel");
