@@ -4,6 +4,9 @@ from bot.view.base_view import BaseView
 from queue import Queue
 from threading import Thread
 import uuid
+from models import User
+from database_connect import session
+
 
 class BaseController:
 
@@ -13,6 +16,10 @@ class BaseController:
         self.q = queue
 
     def start_handler(self, update, context):
+        user_telegram_obj = update.message.from_user     # It's telegram user obj
+        user_database_entity = User(user_telegram_obj)   # It's sqlalchemy user obj
+        session.add(user_database_entity)
+        session.commit()
         return self.base_view.send_greeting_message(update, context)
 
     @run_async

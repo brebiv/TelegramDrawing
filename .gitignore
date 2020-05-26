@@ -11,3 +11,6 @@ config.py
 
 # temp pictures
 temp/*
+
+# Ignore Database for first time
+*.sqlite3
