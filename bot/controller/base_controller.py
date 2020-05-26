@@ -6,6 +6,7 @@ from threading import Thread
 import uuid
 from models import User
 from database_connect import session
+from sqlalchemy.exc import IntegrityError
 
 
 class BaseController:
@@ -17,9 +18,12 @@ class BaseController:
 
     def start_handler(self, update, context):
         user_telegram_obj = update.message.from_user     # It's telegram user obj
-        user_database_entity = User(user_telegram_obj)   # It's sqlalchemy user obj
-        session.add(user_database_entity)
-        session.commit()
+        try:
+            user_database_entity = User(user_telegram_obj)   # It's sqlalchemy user obj
+            session.add(user_database_entity)
+            session.commit()
+        except IntegrityError:      # it's when user already in database
+            pass
         return self.base_view.send_greeting_message(update, context)
 
     @run_async
