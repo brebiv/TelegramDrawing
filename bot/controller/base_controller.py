@@ -22,28 +22,18 @@ class BaseController:
         try:
             user = session.query(User).filter(User.tid == user_telegram_obj.id).one()
             lang_code = context.user_data['lang_code']
-        except NoResultFound:
+        except NoResultFound:   # if user doest exist in database
             user_database_entity = User(user_telegram_obj)   # Add user to database
             session.add(user_database_entity)
             session.commit()
-            return self.base_view.send_choose_language_message(update, context)
-        except KeyError:
-            return self.base_view.send_choose_language_message(update, context)
+            return self.base_view.send_choose_language_message(update.message.chat_id, context)
+        except KeyError:        # if context doesnt have lang_code
+            return self.base_view.send_choose_language_message(update.message.chat_id, context)
         else:
-            self.base_view.send_greeting_message(update.message.from_user.id, context)
+            self.base_view.send_main_menu_message(update.message.chat_id, context)
 
     def language_handler(self, update, context):
-        return self.base_view.send_choose_language_message(update, context)
-
-    @run_async
-    def demo_handler(self, update, context):
-        try:
-            if context.user_data['got_link'] is not True:
-                self.demo_drawing(update, context)
-            else:
-                self.base_view.send_you_already_have_drawing_link_message(update, context)
-        except KeyError:    # When there is no 'got_link' in context
-            self.demo_drawing(update, context)
+        return self.base_view.send_choose_language_message(update.message.chat_id, context)
 
     def callback_query_handler(self, update, context):
         callback = update.callback_query
@@ -55,23 +45,30 @@ class BaseController:
             session.commit()
             context.user_data['lang_code'] = lang_code
             context.bot.delete_message(callback.from_user.id, callback.message.message_id)
-            return self.base_view.send_greeting_message(callback.from_user.id, context)
+            return self.base_view.send_main_menu_message(callback.from_user.id, context)
+        elif callback.data == "demo":
+            try:
+                if context.user_data['got_link'] is not True:
+                    self.demo_drawing(callback.from_user.id, context)
+                else:
+                    self.base_view.send_you_already_have_drawing_link_message(callback.from_user.id, context)
+            except KeyError:  # When there is no 'got_link' in context
+                self.demo_drawing(callback.from_user.id, context)
 
-    def demo_drawing(self, update, context):
+    @run_async
+    def demo_drawing(self, chat_id, context):
         context.user_data['hash'] = str(uuid.uuid4())
-        self.base_view.send_drawing_link(update, context)
+        self.base_view.send_drawing_link(chat_id, context)
         img = self.q.get()
-        self.base_view.send_image(update, context, img)
+        self.base_view.send_image(chat_id, context, img)
         context.user_data['got_link'] = False
 
     def start(self):
         # Create handlers
         start_handler = CommandHandler("start", self.start_handler)
-        demo_handler = CommandHandler("demo", self.demo_handler)
         language_handler = CommandHandler("lang", self.language_handler)
         callback_query_handler = CallbackQueryHandler(self.callback_query_handler)
         # Add handlers
         self.dp.add_handler(start_handler)
-        self.dp.add_handler(demo_handler)
         self.dp.add_handler(language_handler)
         self.dp.add_handler(callback_query_handler)
