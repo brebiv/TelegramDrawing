@@ -21,10 +21,18 @@ class BaseController:
         user_telegram_obj = update.message.from_user     # It's telegram user obj
         try:
             user = session.query(User).filter(User.tid == user_telegram_obj.id).one()
+            lang_code = context.user_data['lang_code']
         except NoResultFound:
             user_database_entity = User(user_telegram_obj)   # Add user to database
             session.add(user_database_entity)
             session.commit()
+            return self.base_view.send_choose_language_message(update, context)
+        except KeyError:
+            return self.base_view.send_choose_language_message(update, context)
+        else:
+            self.base_view.send_greeting_message(update.message.from_user.id, context)
+
+    def language_handler(self, update, context):
         return self.base_view.send_choose_language_message(update, context)
 
     @run_async
@@ -60,8 +68,10 @@ class BaseController:
         # Create handlers
         start_handler = CommandHandler("start", self.start_handler)
         demo_handler = CommandHandler("demo", self.demo_handler)
+        language_handler = CommandHandler("lang", self.language_handler)
         callback_query_handler = CallbackQueryHandler(self.callback_query_handler)
         # Add handlers
         self.dp.add_handler(start_handler)
         self.dp.add_handler(demo_handler)
+        self.dp.add_handler(language_handler)
         self.dp.add_handler(callback_query_handler)

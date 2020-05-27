@@ -14,7 +14,7 @@ class BaseView:
             InlineKeyboardButton(f"{Emoji.ru_flag} Русский", callback_data='lang_ru')
         ]
         kb = InlineKeyboardMarkup(build_keyboard(buttons, 2))
-        return update.message.reply_text("What is your language?", reply_markup=kb)
+        return update.message.reply_text(f"{Emoji.vulcan_salute} What is your language?", reply_markup=kb)
 
     def send_greeting_message(self, chat_id, context):
         text = Text(context.user_data['lang_code'])
