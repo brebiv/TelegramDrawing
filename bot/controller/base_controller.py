@@ -29,11 +29,13 @@ class BaseController:
 
     @run_async
     def demo_handler(self, update, context):
-        # Here is an issue, when people can send /start very fast, it will create many threads, should fix it.
-        context.user_data['hash'] = str(uuid.uuid4())
-        self.base_view.send_drawing_link(update, context)
-        img = self.q.get()
-        self.base_view.send_image(update, context, img)
+        try:
+            if context.user_data['got_link'] is not True:
+                self.demo_drawing(update, context)
+            else:
+                self.base_view.send_you_already_have_drawing_link_message(update, context)
+        except KeyError:    # When there is no 'got_link' in context
+            self.demo_drawing(update, context)
 
     def callback_query_handler(self, update, context):
         callback = update.callback_query
@@ -44,7 +46,15 @@ class BaseController:
             user.lang_code = lang_code
             session.commit()
             context.user_data['lang_code'] = lang_code
+            context.bot.delete_message(callback.from_user.id, callback.message.message_id)
             return self.base_view.send_greeting_message(callback.from_user.id, context)
+
+    def demo_drawing(self, update, context):
+        context.user_data['hash'] = str(uuid.uuid4())
+        self.base_view.send_drawing_link(update, context)
+        img = self.q.get()
+        self.base_view.send_image(update, context, img)
+        context.user_data['got_link'] = False
 
     def start(self):
         # Create handlers
