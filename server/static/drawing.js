@@ -1,9 +1,19 @@
+var sketchpad;
+
 function init() {
-    var sketchpad = new Sketchpad({
+    colorPicker = document.querySelector("#color-picker");
+    colorPicker.addEventListener("change", updateColor, false);
+    colorPicker.select();
+    sketchpad = new Sketchpad({
         element: '#panel',
         width: window.innerWidth,
         height: window.innerHeight,
     });
+}
+
+function updateColor(event) {
+    console.log("Color changed")
+    sketchpad.color = event.target.value;
 }
 
 function toPNG() {
