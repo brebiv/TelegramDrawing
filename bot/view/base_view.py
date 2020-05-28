@@ -29,7 +29,7 @@ class BaseView:
         context.user_data['got_link'] = True
         url = WebServerConfig.ADDRESS + "/" + context.user_data['hash']
         context.user_data['url'] = url
-        return context.bot.send_message(chat_id, "Click to draw " + text.create_inline_url(url))
+        return context.bot.send_message(chat_id, text.replies.click_to_draw + text.create_inline_url(url))
 
     def send_you_already_have_drawing_link_message(self, chat_id, context):
         text = Text(context.user_data['lang_code'])

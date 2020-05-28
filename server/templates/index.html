@@ -9,15 +9,17 @@
     <title>Drawing Bot</title>
     <script src="{{ url_for ('static', filename='bower_components/sketchpad/scripts/sketchpad.js') }}"></script>
     <script src="{{ url_for ('static', filename='lib/jquery-3.5.1.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='drawing.js') }}?v=1"></script>
+    <script type="text/javascript" src="{{ url_for ('static', filename='lib/farbtastic.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for ('static', filename='lib/farbtastic.css') }}" type="text/css" />
+    <script type="text/javascript" src="{{ url_for('static', filename='drawing.js') }}?v=2"></script>
 </head>
 <body onload="init();">
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <h1 class="text-center">Draw here</h1>
+                <button onclick="toPNG()">Send</button>
+                <input type="color" id="color-picker" name="color" value="#000000" />
             </div>
-            <button onclick="toPNG()">Save</button>
         </div>
     </div>
     <canvas id="panel"></canvas>
