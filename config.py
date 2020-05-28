@@ -5,7 +5,8 @@ class BotConfig:
 
 class WebServerConfig:
 
-    ADDRESS = "http://localhost:5000"
+    # Your server ip address, if port either 80 or 443 you can not specify it in address.
+    ADDRESS = "http://0.0.0.0:5000"
 
 
 class DataBaseConfig:
