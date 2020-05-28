@@ -11,7 +11,11 @@ cd TelegramDrawing
 pip install -r requirements.txt
 ```
 Then change API_TOKEN in config.py to your bot token.
+After that
 
+```bash
+python run.py
+```
 ## Usage
 Use /start to start.
 
