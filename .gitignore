@@ -5,12 +5,3 @@ __pycache__/
 
 # Virtual enviroment
 venv
-
-# Config where some important stuff is stored (api_token for example)
-config.py
-
-# temp pictures
-temp/*
-
-# Ignore Database for first time
-*.sqlite3
