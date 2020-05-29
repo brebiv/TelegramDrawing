@@ -1,7 +1,10 @@
 # Telegram Drawing
 
 It is combination of Telegram Bot and Web Server that allows to draw
+
 Using flask + python-telegram-bot
+
+Bot is built using MVC pattern.
 
 ## Installation
 
