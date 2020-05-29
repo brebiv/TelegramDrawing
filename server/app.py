@@ -31,7 +31,9 @@ class ServerWrapper:
         img_data = request.get_data()
         raw_data = img_data.decode("UTF-8").split(",")[1].encode()
         image = Image.open(BytesIO(base64.b64decode(raw_data)))
-        self.q.put(image)
+        self.q.put({
+            'hash': hash,
+            'image': image})
         return "Ok"
 
     def run(self):

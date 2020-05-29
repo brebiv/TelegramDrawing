@@ -60,8 +60,11 @@ class BaseController:
         context.user_data['hash'] = str(uuid.uuid4())
         self.base_view.send_drawing_link(chat_id, context)
         img = self.q.get()
-        self.base_view.send_image(chat_id, context, img)
-        context.user_data['got_link'] = False
+        if img['hash'] == context.user_data['hash']:
+            self.base_view.send_image(chat_id, context, img['image'])
+            context.user_data['got_link'] = False
+        else:
+            self.q.put(img)
 
     def start(self):
         # Create handlers
